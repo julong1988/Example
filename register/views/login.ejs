@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title><%= title %></title>
+<meta charset="utf-8">
+<link href="/css/style.css" rel="stylesheet" media="all" />
+</head>
+<body>
+
+
+<div class="top-buttons-agileinfo">
+<a href="/login"  class="active">登录</a><a href="/signup">注册</a>
+</div>
+<h1>实习登录和注册表单</h1>
+<h4 id="message"></h4>
+<div class="main-agileits">
+<!--form-stars-here-->
+	<div class="form-w3-agile">
+		<h2 class="sub-agileits-w3layouts">登录</h2>
+		<form action="#" method="post">
+			<input type="input" name="name" placeholder="用户" required="" id="username" />
+			<input type="password" name="password" placeholder="密码" required="" id="password" />
+			<a href="#" class="forgot-w3layouts">忘记密码 ?</a>
+			<div class="submit-w3l">
+				<input type="submit" value="登录" id="btn_login">
+			</div>
+			<p class="p-bottom-w3ls"><a href="/signup">点击注册</a>如果你没有一个帐户.</p>
+		</form>
+	</div>
+</div>
+<!--//form-ends-here-->
+<!-- copyright -->
+<div class="copyright w3-agile">
+	<p> © 2017</a></p>
+</div>
+<!-- //copyright --> 
+<script type="text/javascript" src="/js/jquery-2.1.4.min.js"></script>
+<script>
+$(function(){
+var $message = $('#message');
+$("#btn_login").click(function(){
+
+	var data = {
+		username:$("#username").val(),
+		password:$("#password").val()
+	}
+
+	$.ajax({
+		url: '/login',  
+		type: 'post',  
+		data: data,
+		success: function (data,status) {  
+
+			//console.log(data)
+			
+			if (status == 'success' && data.code !== 200) {
+				$message.text(data.msg);
+			} else if (status === 'success' && data.code === 200) {
+				$message.text(data.msg + '页面将在3秒后跳转');
+				setTimeout(function() {
+					window.location.href = '/';
+				}, 3000);
+			}
+			
+		},  
+		clearForm: false,//禁止清楚表单  
+		resetForm: false //禁止重置表单  
+	})
+	return false;
+})
+
+
+})
+</script>
+
+</body>
+</html>
