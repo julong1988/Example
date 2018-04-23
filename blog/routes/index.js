@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var moment = require('moment');
 
 function _res(code){
   var msg;
@@ -22,6 +23,9 @@ function _res(code){
     case 8005:
       msg="用户创建成功";
       break;
+    case 8006:
+      msg="文章成功发布";
+      break;
     default:
       msg="系统错误";
   }
@@ -30,18 +34,34 @@ function _res(code){
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
+  var post = global.userHandle.getModel('post');
+  
+
+  post.find({},function (error, doc) {  
+    if (error) {  
+      res.send(_res(1000))
+    } else {
+      res.render('index',{
+        title:'Blog Home',
+        blogpost:doc
+      })
+    } 
+
+  }).sort({'_id':-1});
+  /*title 
   if(req.session.user){
-    res.render('index', { title: 'Home' });
+    
   }else{
     res.redirect("/login");
   }
+  */
   
 });
 
 router.route('/login').get(function(req,res){
   res.render("login", { title: 'Login' });
 }).post(function(req,res){
-  var user = global.dbhandle.getModel('user');
+  var user = global.userHandle.getModel('user');
   var u_name = req.body.username;
   var u_password = req.body.password;
 
@@ -70,7 +90,7 @@ router.route('/signup').get(function(req,res){
 
 }).post(function(req,res){
 
-  var user = global.dbhandle.getModel('user');
+  var user = global.userHandle.getModel('user');
   var u_name = req.body.username;
   var u_password = req.body.password;
 
@@ -102,5 +122,39 @@ router.get("/logout", function(req, res) {
   req.session.error = null;
   res.redirect("/");
 });
+
+
+
+router.route('/write').get(function(req,res){
+
+  if(req.session.user){
+    res.render('write', { title: 'write page' });
+  }else{
+    res.render('chmod', { title: 'error' });
+  }
+
+}).post(function(req,res){
+  var post = global.userHandle.getModel('post');
+  var p_name = req.body.name;
+  var p_date = moment().format('YYYY-MM-DD HH:mm:ss');
+  var p_title = req.body.title;
+  var p_content = req.body.content;
+
+  post.create({  
+    name: p_name,  
+    date: p_date,  
+    title: p_title,
+    content: p_content
+}, function (error, doc) {  
+    if (error) {  
+      res.send(_res(1000))
+    } else {  
+      res.send(_res(8006))    
+    }  
+
+  });
+});
+
+
 
 module.exports = router;
