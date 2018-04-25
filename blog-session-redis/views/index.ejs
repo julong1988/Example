@@ -1,0 +1,68 @@
+<% include ./include/header.ejs %>
+       
+
+		<!-- .main-container -->
+		<div class="main-container">
+			
+
+			<div class="main wrapper clearfix">
+				
+					
+
+
+		
+		<div class="column-one">
+
+
+			<div id="" class="clearfix">
+			
+								
+					<% for(var i=0;i<blogpost.length;i++){ %>
+				<article class="post clearfix box full-width" role="article">
+
+					<header>
+						<h2 class="post-title"><a href="#"><%= blogpost[i].title %></a></h2>
+					</header>
+
+					<div class="entry-content">
+						<p><%= blogpost[i].content %></p>
+					</div>
+
+					<div class="meta clearfix">
+						<span class="post-date"><%= blogpost[i].name %></span>
+						<span class="post-date"><%= blogpost[i].date %></span>
+					</div>
+				</article>
+				<% } %>
+
+				
+
+
+				
+
+			
+
+				
+
+
+				
+			</div><!-- //posts -->
+
+
+			<!-- begin #pagination -->
+					    <!-- end #pagination -->
+
+			
+			
+		</div><!-- end #column-one -->
+
+
+		
+
+
+                </div>
+                <!-- end #main -->
+            </div>
+            <!-- end .main-container -->
+
+			<% include ./include/footer.ejs %>
