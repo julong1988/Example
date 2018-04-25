@@ -1,0 +1,100 @@
+<% include ./include/header.ejs %>
+       
+
+		<!-- .main-container -->
+		<div class="main-container">
+			
+
+			<div class="main wrapper clearfix">
+				
+					
+
+
+	<div class="column-one">
+
+         
+
+			
+			<article id="post-129" class="post-129 page type-page status-publish hentry clearfix " role="article">
+
+				<header>
+						<h2 class="post-title">Contact</h2>
+				</header>
+
+			</article>
+
+			<section>
+
+			<p>This is a sample contact page.</p>
+
+			
+			<p class="error" >There was an error submitting the form.</p>
+
+			<p class="thanks"><strong>Thanks!</strong> Your email was successfully sent. We should be in touch soon.</p>
+
+			<!-- contact form -->
+			<form action="#" method="post">
+                <input type="text" id="name" name="title" value="<%- user.name %>" class="requiredField" hidden/>
+                 <div class="form-row">
+                     <div class="input col_half first">
+                         <label for="title">title<sup>*</sup></label>
+                         <input type="text" id="title" name="title" value="" class="requiredField"/>
+                     </div>
+                 </div>
+                 <div class="form-row">
+                     <div class="input textarea">
+                         <label for="message">Message<sup>*</sup></label>
+                         <textarea cols="20" rows="7" id="content" name="message" class="requiredField"></textarea>
+                     </div>
+                 </div>
+                 <div class="form-row">
+					<input type="submit" value="Send" id="btn_submit" class="modern socle" />
+                 </div>
+             </form>
+             <!-- end contact form -->
+
+			</section>
+
+
+	</div><!-- end #column-one -->
+
+	
+                </div>
+                <!-- end #main -->
+            </div>
+<script>
+(function($){
+    $("#btn_submit").click(function(){
+
+    var data = {
+        name:$("#name").val(),
+        title:$("#title").val(),
+        content:$("#content").val()
+    }
+
+    $.ajax({
+        url: '/write',  
+        type: 'post',  
+        data: data,
+        success: function (data) {  
+
+            console.log(data)
+            if(data.code === 8006){
+                setTimeout(function() {
+                    window.location.href = '/';
+                }, 3000);
+            }
+        },  
+        clearForm: false,//禁止清楚表单  
+        resetForm: false //禁止重置表单  
+    })
+    return false;
+})
+
+
+})(jQuery)
+</script>
+
+
+            <!-- end .main-container -->
+			<% include ./include/footer.ejs %>

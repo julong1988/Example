@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title><%= title %></title>
+<meta charset="utf-8">
+<link href="/css/style.css" rel="stylesheet" media="all" />
+</head>
+<body>
+
+<div class="top-buttons-agileinfo">
+<a href="/login">登录</a><a href="/signup" class="active">注册</a>
+<h4 id="message"></h4>
+</div>
+<h1>Internship Sign In & Sign Up Form</h1>
+<div class="main-agileits">
+<!--form-stars-here-->
+<div class="form-w3-agile">
+	<h2 class="sub-agileits-w3layouts">Sign Up</h2>
+	<form action="#" method="post">
+			<input type="text" name="Username" id="username" placeholder="Username" required="" />
+			<input type="password" name="Password" id="password" placeholder="Password" required="" />
+			<!-- <input type="password" name="Password" placeholder="Confirm Password" required="" /> -->
+		<div class="submit-w3l">
+			<input type="submit" value="Sign up" id="btn_signup">
+		</div>
+	</form>
+</div>
+</div>
+<!--//form-ends-here-->
+<!-- copyright -->
+<div class="copyright w3-agile">
+	<p> © 2017</p>
+</div>
+<!-- //copyright --> 
+<script type="text/javascript" src="/js/jquery-2.1.4.min.js"></script>
+<script>
+$(function(){
+	var $message = $('#message');
+	$("#btn_signup").click(function(){
+
+		var data = {
+			username:$("#username").val(),
+			password:$("#password").val()
+		}
+
+		$.ajax({
+			url: '/signup',  
+			type: 'post',  
+			data: data,
+			success: function (data) {  
+
+				//console.log(data)
+				if (data.code === 8005) {
+					$message.text(data.msg + '页面将在3秒后跳转');
+					setTimeout(function() {
+						window.location.href = '/';
+					}, 3000);
+				}else{
+					$message.text(data.msg);
+				}
+			},  
+			clearForm: false,//禁止清楚表单  
+			resetForm: false //禁止重置表单  
+		})
+		return false;
+	})
+	
+	
+})
+</script>
+</body>
+</html>
