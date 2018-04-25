@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 //var logger = require('morgan');
 var mongoose = require('mongoose');
 
@@ -15,6 +16,7 @@ global.db = mongoose.connect("mongodb://localhost:27017/test_blog");
 var app = express();
 app.use(session({
   secret: 'secret',
+  store: new MongoStore({ url: 'mongodb://localhost:27017/test_blog' }),
   cookie: {
     maxAge: 1000 * 60 * 30
   }
