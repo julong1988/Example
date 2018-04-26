@@ -18,7 +18,7 @@ oauthConfig.map(function(item) {
     router.get('/auth/'+item,
         passport.authenticate(item, { scope: ['profile'] })
     );
-    router.get('/auth/google/callback', 
+    router.get('/auth/'+item+'/callback', 
         passport.authenticate(item, { failureRedirect: '/login' }),
         function(req, res) {
         // Successful authentication, redirect home.

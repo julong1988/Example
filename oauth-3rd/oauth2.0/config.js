@@ -1,3 +1,3 @@
-var oauthConfig = ['google']
+var oauthConfig = ['google','kakao']
 
  module.exports = oauthConfig;
