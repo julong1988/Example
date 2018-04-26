@@ -5,7 +5,12 @@ var oauthConfig = require('../oauth2.0/config');
 
 router.get('/',
   function(req, res) {
-    res.render('home', { user: req.user });
+    //res.render('home', { user: req.user });
+    if(req.session.user){
+      res.render('home', { user: req.user });
+    }else{
+      res.redirect("/login");
+    }
   });
 
 router.get('/login',
