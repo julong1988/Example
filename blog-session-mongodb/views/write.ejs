@@ -33,8 +33,8 @@
 			<p class="thanks"><strong>Thanks!</strong> Your email was successfully sent. We should be in touch soon.</p>
 
 			<!-- contact form -->
-			<form action="#" method="post">
-                <input type="text" id="name" name="title" value="<%- user.name %>" class="requiredField" hidden/>
+			<form action="/write" method="post" id="form" enctype="multipart/form-data">
+                <input type="text" id="name" name="name" value="<%- user.name %>" class="requiredField" hidden/>
                  <div class="form-row">
                      <div class="input col_half first">
                          <label for="title">title<sup>*</sup></label>
@@ -43,10 +43,16 @@
                  </div>
                  <div class="form-row">
                      <div class="input textarea">
-                         <label for="message">Message<sup>*</sup></label>
-                         <textarea cols="20" rows="7" id="content" name="message" class="requiredField"></textarea>
+                         <label for="content">content<sup>*</sup></label>
+                         <textarea cols="20" rows="7" id="content" name="content" class="requiredField"></textarea>
                      </div>
                  </div>
+                 <div class="form-row">
+                    <div class="input col_half first">
+                        <label for="file">file<sup>*</sup></label>
+                        <input type="file" id="file" name="file" value="" class="requiredField"/>
+                    </div>
+                </div>
                  <div class="form-row">
 					<input type="submit" value="Send" id="btn_submit" class="modern socle" />
                  </div>
@@ -64,8 +70,29 @@
             </div>
 <script>
 (function($){
-    $("#btn_submit").click(function(){
+    var options = {
+        beforeSubmit: showRequest,  // pre-submit callback
+        success: showResponse  // post-submit callback
+    };
+    // pre-submit callback
+    function showRequest(formData, jqForm, options) {
+            //alert('Uploading is starting.');
+            console.log(formData)
+            return true;
+        }
 
+        // post-submit callback
+        function showResponse(responseText, statusText, xhr, $form) {
+            //alert('status: ' + statusText + '\n\nresponseText: \n' + responseText );
+            //console.log(responseText)
+        }
+        console.log(123)
+        $("#form").ajaxForm(options);
+    $("#fo2rm").submit(function(){
+        
+        $(this).ajaxForm(options);
+        //$(this).ajaxSubmit(options);
+        /*
     var data = {
         name:$("#name").val(),
         title:$("#title").val(),
@@ -88,6 +115,7 @@
         clearForm: false,//禁止清楚表单  
         resetForm: false //禁止重置表单  
     })
+    */
     return false;
 })
 

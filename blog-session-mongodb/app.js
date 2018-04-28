@@ -13,6 +13,7 @@ global.postHandle = require('./db/postHandle');
 global.userHandle = require('./db/userHandle');
 global.db = mongoose.connect("mongodb://localhost:27017/test_blog");
 
+
 var app = express();
 app.use(session({
   secret: 'secret',

@@ -1,6 +1,18 @@
 var express = require('express');
 var router = express.Router();
 var moment = require('moment');
+var multer = require('multer');
+
+var Storage = multer.diskStorage({
+  destination: function (req, file, callback) {
+      callback(null, __dirname.replace('routes', '') + 'public/upload/');
+  },
+  filename: function (req, file, callback) {
+      callback(null, file.fieldname + "_" + Date.now() + "_" + file.originalname);
+  }
+});
+
+var upload = multer({ storage: Storage }).single("file"); //Field name and max count
 
 function _res(code){
   var msg;
@@ -25,6 +37,9 @@ function _res(code){
       break;
     case 8006:
       msg="文章成功发布";
+      break;
+    case 8007:
+      msg="文件上传失败";
       break;
     default:
       msg="系统错误";
@@ -134,25 +149,55 @@ router.route('/write').get(function(req,res){
   }
 
 }).post(function(req,res){
-  var post = global.userHandle.getModel('post');
-  var p_name = req.body.name;
-  var p_date = moment().format('YYYY-MM-DD HH:mm:ss');
-  var p_title = req.body.title;
-  var p_content = req.body.content;
+  upload(req, res, function (err) {
 
-  post.create({  
-    name: p_name,  
-    date: p_date,  
-    title: p_title,
-    content: p_content
-}, function (error, doc) {  
-    if (error) {  
-      res.send(_res(1000))
-    } else {  
-      res.send(_res(8006))    
-    }  
-
+    if (err) {
+      console.log(err)
+      res.send(_res(8007))
+    }else{
+      var post = global.userHandle.getModel('post');
+      var p_name = req.body.name;
+      var p_date = moment().format('YYYY-MM-DD HH:mm:ss');
+      var p_title = req.body.title;
+      var p_content = req.body.content;
+      var p_file = "/upload/" + req.file.filename
+      post.create({  
+        name: p_name,  
+        date: p_date,  
+        title: p_title,
+        content: p_content,
+        imgFile: p_file
+    }, function (error, doc) { 
+      
+        if (error) { 
+          console.log("error")
+          res.send(_res(1000))
+        } else { 
+          console.log(234)
+          res.send(_res(8006))    
+        }  
+    
+      });
+      
+    }
   });
+  //res.send("12")
+  /*
+  
+      */
+    /*
+  upload(req2, res2, function (err) {
+
+    console.log(123123)
+    if (err) {
+      res.send(_res(8007))
+    }else{
+      console.log(req)
+      console.log(req2)
+    }
+  });*/
+
+  
 });
 
 

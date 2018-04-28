@@ -26,6 +26,9 @@
 
 					<div class="entry-content">
 						<p><%= blogpost[i].content %></p>
+						<% if(blogpost[i].imgFile) { %>
+						<p><img src='<%= blogpost[i].imgFile %>'></p>
+						<% } %>
 					</div>
 
 					<div class="meta clearfix">
