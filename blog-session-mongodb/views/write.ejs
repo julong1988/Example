@@ -70,54 +70,26 @@
             </div>
 <script>
 (function($){
-    var options = {
-        beforeSubmit: showRequest,  // pre-submit callback
-        success: showResponse  // post-submit callback
-    };
-    // pre-submit callback
     function showRequest(formData, jqForm, options) {
             //alert('Uploading is starting.');
-            console.log(formData)
+            //console.log(formData)
             return true;
         }
 
         // post-submit callback
         function showResponse(responseText, statusText, xhr, $form) {
-            //alert('status: ' + statusText + '\n\nresponseText: \n' + responseText );
-            //console.log(responseText)
+            alert('status: ' + statusText + '\n\nresponseText: \n' + responseText );
+            console.log(xhr)
         }
-        console.log(123)
+
+    var options = {
+        beforeSubmit: showRequest,  // pre-submit callback
+        success: showResponse
+    };
+    // pre-submit callback
+    
         $("#form").ajaxForm(options);
-    $("#fo2rm").submit(function(){
-        
-        $(this).ajaxForm(options);
-        //$(this).ajaxSubmit(options);
-        /*
-    var data = {
-        name:$("#name").val(),
-        title:$("#title").val(),
-        content:$("#content").val()
-    }
-
-    $.ajax({
-        url: '/write',  
-        type: 'post',  
-        data: data,
-        success: function (data) {  
-
-            console.log(data)
-            if(data.code === 8006){
-                setTimeout(function() {
-                    window.location.href = '/';
-                }, 3000);
-            }
-        },  
-        clearForm: false,//禁止清楚表单  
-        resetForm: false //禁止重置表单  
-    })
-    */
-    return false;
-})
+    
 
 
 })(jQuery)

@@ -27,7 +27,7 @@ var Storage = multer.diskStorage({
       callback(null, __dirname.replace('routes', '') + 'public/upload/');
   },
   filename: function (req, file, callback) {
-      callback(null, file.fieldname + "_" + Date.now() + "_" + file.originalname);
+      callback(null, Date.now() + "_" + file.originalname);
   }
 });
 
@@ -173,13 +173,14 @@ router.route('/write').get(function(req,res){
   form.parse(req, function(err, fields, files) {  
     //console.log('fields',fields);//表单传递的input数据  
 
-    formUploader.putFile(uploadToken, files.file.name, files.file.path, putExtra, function(respErr,
+    formUploader.putFile(uploadToken, Date.now() + "_" + files.file.name, files.file.path, putExtra, function(respErr,
       respBody, respInfo) {
       if (respErr) {
         throw respErr;
       }
     
       if (respInfo.statusCode == 200) {
+        res.send("ok")
         console.log(respBody);
       } else {
         console.log(respInfo.statusCode);
