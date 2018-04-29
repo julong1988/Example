@@ -2,6 +2,25 @@ var express = require('express');
 var router = express.Router();
 var moment = require('moment');
 var multer = require('multer');
+var formidable = require("formidable");
+//qiniu cdn
+var qiniu = require('qiniu');
+var accessKey = '_bAYnbQOcGO-JZML2M9blQa2FxM4MbDaBxG_pSAn';
+var secretKey = 'm_8f2CGLvm4fzmwMsC11mZbOsNHKqPqhIpaQriHg';
+var mac = new qiniu.auth.digest.Mac(accessKey, secretKey);
+var config = new qiniu.conf.Config();
+// 空间对应的机房
+config.zone = qiniu.zone.Zone_z0;
+var options = {
+  scope: 'julong1988',
+  expires: 7200
+};
+var putPolicy = new qiniu.rs.PutPolicy(options);
+var uploadToken=putPolicy.uploadToken(mac);
+
+var formUploader = new qiniu.form_up.FormUploader(config);
+var putExtra = new qiniu.form_up.PutExtra();
+
 
 var Storage = multer.diskStorage({
   destination: function (req, file, callback) {
@@ -12,7 +31,7 @@ var Storage = multer.diskStorage({
   }
 });
 
-var upload = multer({ storage: Storage }).single("file"); //Field name and max count
+var upload = multer({ storage: Storage,preservePath: true }).single("file"); //Field name and max count
 
 function _res(code){
   var msg;
@@ -149,6 +168,30 @@ router.route('/write').get(function(req,res){
   }
 
 }).post(function(req,res){
+  //console.log(req.file)
+  var form = new formidable.IncomingForm();  
+  form.parse(req, function(err, fields, files) {  
+    //console.log('fields',fields);//表单传递的input数据  
+
+    formUploader.putFile(uploadToken, files.file.name, files.file.path, putExtra, function(respErr,
+      respBody, respInfo) {
+      if (respErr) {
+        throw respErr;
+      }
+    
+      if (respInfo.statusCode == 200) {
+        console.log(respBody);
+      } else {
+        console.log(respInfo.statusCode);
+        console.log(respBody);
+      }
+    });
+    
+
+  });  
+
+
+  /*
   upload(req, res, function (err) {
 
     if (err) {
@@ -181,21 +224,7 @@ router.route('/write').get(function(req,res){
       
     }
   });
-  //res.send("12")
-  /*
-  
-      */
-    /*
-  upload(req2, res2, function (err) {
-
-    console.log(123123)
-    if (err) {
-      res.send(_res(8007))
-    }else{
-      console.log(req)
-      console.log(req2)
-    }
-  });*/
+  */
 
   
 });
