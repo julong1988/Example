@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var crypto = require('crypto');
 var moment = require('moment');
 
 function _res(code){
@@ -63,7 +64,8 @@ router.route('/login').get(function(req,res){
 }).post(function(req,res){
   var user = global.userHandle.getModel('user');
   var u_name = req.body.username;
-  var u_password = req.body.password;
+  var md5 = crypto.createHash('md5');
+  var u_password = md5.update(req.body.password).digest('hex')
 
   user.findOne({ name: u_name }, function(err, doc) {
 
@@ -92,7 +94,10 @@ router.route('/signup').get(function(req,res){
 
   var user = global.userHandle.getModel('user');
   var u_name = req.body.username;
-  var u_password = req.body.password;
+  var md5 = crypto.createHash('md5');
+  var u_password = md5.update(req.body.password).digest('hex')
+
+  
 
   user.findOne({ name: u_name }, function(err, doc) {
     if(err){
