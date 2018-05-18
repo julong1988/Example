@@ -1,12 +1,11 @@
 var server = require('../config');
 var user = global.dbHandle.getModel('user');
-var crypto = require('crypto');
+var encode = require('./tool/encode')
 
 server.post('/user', function (req, res, next) {
     user.find({ email: req.body.email }, function(err, doc) {
 
-      // 1MD5 Hash 2SHA-1 Hash
-      let pw = crypto.createHash('sha1').update(crypto.createHash('md5').update(req.body.password).digest('hex')).digest('hex');
+      let pw = encode(req.body.password);
       
         if (err) {
             res.send(err);

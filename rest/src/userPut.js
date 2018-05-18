@@ -3,7 +3,7 @@ var user = global.dbHandle.getModel('user');
 
 server.put('/user', function (req, res, next) {
 
-  user.find({email:req.body.email},{__v:0,password:0},function(err, doc){
+  user.find({email:req.body.email},function(err, doc){
     if(err){
         res.send(err)
     }else if(!doc[0]){
