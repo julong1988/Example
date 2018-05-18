@@ -1,6 +1,7 @@
 var server = require('../config');
 var user = global.dbHandle.getModel('user');
 var encode = require('./tool/encode')
+var token = require('../token/token');
 
 server.post('/user', function (req, res, next) {
     user.find({ email: req.body.email }, function(err, doc) {
@@ -30,3 +31,4 @@ server.post('/user', function (req, res, next) {
         return next();
       });
 });
+
